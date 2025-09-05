@@ -18,26 +18,26 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.UUID)
+        private UUID id;
 
-    // Auditing fields
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+        // Auditing fields
+        @CreationTimestamp
+        @Column(name = "created_at", nullable = false, updatable = false)
+        private LocalDateTime createdAt;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+        @UpdateTimestamp
+        @Column(name = "updated_at")
+        private LocalDateTime updatedAt;
 
-    @CreatedBy
-    @Column(name = "created_by", updatable = false)
-    private UUID createdBy;
+        @CreatedBy
+        @Column(name = "created_by", updatable = false)
+        private UUID createdBy;
 
-    @LastModifiedBy
-    @Column(name = "updated_by")
-    private UUID updatedBy;
+        @LastModifiedBy
+        @Column(name = "updated_by")
+        private UUID updatedBy;
 
 //    @PreUpdate
 //    @PreRemove

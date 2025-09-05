@@ -2,17 +2,17 @@ package br.com.murilocb123.portflow.mapper;
 
 import br.com.murilocb123.portflow.domain.entities.UserEntity;
 import br.com.murilocb123.portflow.dto.UserDTO;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class UserMapper {
     public static UserDTO toDTO(UserEntity entity) {
         if (entity == null) return null;
         return new UserDTO(
-            entity.getId(),
-            entity.getEmail(),
-            entity.getName(),
-            entity.isActive(),
-            entity.getTenantId()
-        );
+                entity.getId(),
+                entity.getEmail(),
+                entity.getName(),
+                entity.isActive());
     }
 
     public static UserEntity toEntity(UserDTO dto) {
@@ -22,7 +22,6 @@ public class UserMapper {
         entity.setEmail(dto.email());
         entity.setName(dto.name());
         entity.setActive(dto.active());
-        entity.setTenantId(dto.tenantId());
         return entity;
     }
 }

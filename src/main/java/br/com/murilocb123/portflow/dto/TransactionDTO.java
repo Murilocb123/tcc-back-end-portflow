@@ -7,13 +7,18 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record TransactionDTO(
-    UUID id,
-    UUID brokerId,
-    UUID assetId,
-    UUID portfolioId,
-    TxnType txnType,
-    BigDecimal value,
-    LocalDate txnDate,
-    String description
-) {}
-
+        UUID id,
+        BrokerDTO broker,
+        AssetDTO asset,
+        PortfolioDTO portfolio,
+        TxnType type,
+        LocalDate tradeDate,
+        BigDecimal quantity,
+        BigDecimal price,
+        BigDecimal grossValue,
+        BigDecimal netValue,
+        BigDecimal feeValue,
+        BigDecimal taxValue,
+        String description
+) {
+}

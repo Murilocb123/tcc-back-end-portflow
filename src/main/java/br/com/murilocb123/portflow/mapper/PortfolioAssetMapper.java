@@ -2,18 +2,19 @@ package br.com.murilocb123.portflow.mapper;
 
 import br.com.murilocb123.portflow.domain.entities.PortfolioAssetEntity;
 import br.com.murilocb123.portflow.dto.PortfolioAssetDTO;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class PortfolioAssetMapper {
     public static PortfolioAssetDTO toDTO(PortfolioAssetEntity entity) {
         if (entity == null) return null;
         return new PortfolioAssetDTO(
             entity.getId(),
-            entity.getAsset() != null ? entity.getAsset().getId() : null,
-            entity.getPortfolio() != null ? entity.getPortfolio().getId() : null,
-            entity.getBroker() != null ? entity.getBroker().getId() : null,
             entity.getQuantity(),
             entity.getAveragePrice(),
-            entity.getTotalValue()
+            entity.getTotalValue(),
+            BrokerMapper.toDTO(entity.getBroker()),
+            AssetMapper.toDTO(entity.getAsset())
         );
     }
 
@@ -24,7 +25,8 @@ public class PortfolioAssetMapper {
         entity.setQuantity(dto.quantity());
         entity.setAveragePrice(dto.averagePrice());
         entity.setTotalValue(dto.totalValue());
-        // Asset, Portfolio e Broker devem ser setados via service/repository se necessário
+        entity.setBroker(BrokerMapper.toEntity(dto.broker()));
+        entity.setAsset(AssetMapper.toEntity(dto.asset()));
         return entity;
     }
 }

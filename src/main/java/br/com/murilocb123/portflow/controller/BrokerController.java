@@ -15,7 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/brokers")
+@RequestMapping("/api/broker")
 @RequiredArgsConstructor
 public class BrokerController {
     private final BrokerService brokerService;

@@ -25,8 +25,8 @@ public class AssetEntity extends AbstractEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "asset_type", nullable = false)
-    private AssetType assetClass;
+    @Column(name = "type", nullable = false)
+    private AssetType type;
 
     @Column(name = "currency", nullable = false, length = 3)
     private String currency = "BRL";

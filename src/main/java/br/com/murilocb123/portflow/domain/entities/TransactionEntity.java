@@ -36,9 +36,6 @@ public class TransactionEntity extends AbstractPortfolioEntity {
     @Column(name = "trade_date", nullable = false)
     private LocalDate tradeDate;
 
-    @Column(name = "settlement_date")
-    private LocalDate settlementDate;
-
     @Column(name = "quantity", precision = 28, scale = 10)
     private BigDecimal quantity = BigDecimal.ZERO;
 
@@ -57,6 +54,6 @@ public class TransactionEntity extends AbstractPortfolioEntity {
     @Column(name = "tax_value", precision = 18, scale = 2)
     private BigDecimal taxValue = BigDecimal.ZERO;
 
-    @Column(name = "notes")
-    private String notes;
+    @Column(name = "description")
+    private String description;
 }

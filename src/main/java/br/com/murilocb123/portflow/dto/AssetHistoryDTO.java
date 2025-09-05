@@ -5,8 +5,12 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record AssetHistoryDTO(
-    UUID assetId,
-    LocalDate date,
-    BigDecimal closePrice
-) {}
-
+        UUID assetId,
+        LocalDate date,
+        BigDecimal closePrice,
+        BigDecimal openPrice,
+        BigDecimal highPrice,
+        BigDecimal lowPrice,
+        Long volume
+) {
+}

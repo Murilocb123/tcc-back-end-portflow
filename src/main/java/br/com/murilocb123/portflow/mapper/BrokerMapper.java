@@ -2,7 +2,9 @@ package br.com.murilocb123.portflow.mapper;
 
 import br.com.murilocb123.portflow.domain.entities.BrokerEntity;
 import br.com.murilocb123.portflow.dto.BrokerDTO;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class BrokerMapper {
     public static BrokerDTO toDTO(BrokerEntity entity) {
         if (entity == null) return null;

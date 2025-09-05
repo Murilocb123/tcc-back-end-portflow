@@ -1,7 +1,6 @@
 package br.com.murilocb123.portflow.mapper;
 
 import br.com.murilocb123.portflow.domain.entities.AssetEntity;
-import br.com.murilocb123.portflow.domain.enums.AssetType;
 import br.com.murilocb123.portflow.dto.AssetDTO;
 
 public class AssetMapper {
@@ -11,8 +10,9 @@ public class AssetMapper {
             entity.getId(),
             entity.getTicker(),
             entity.getName(),
-            entity.getAssetClass() != null ? entity.getAssetClass().name() : null,
-            entity.getCurrency()
+            entity.getType(),
+            entity.getCurrency(),
+            entity.getExchange()
         );
     }
 
@@ -22,8 +22,9 @@ public class AssetMapper {
         entity.setId(dto.id());
         entity.setTicker(dto.ticker());
         entity.setName(dto.name());
-        entity.setAssetClass(dto.assetClass() != null ? AssetType.valueOf(dto.assetClass()) : null);
+        entity.setType(dto.type());
         entity.setCurrency(dto.currency());
+        entity.setExchange(dto.exchange());
         return entity;
     }
 }

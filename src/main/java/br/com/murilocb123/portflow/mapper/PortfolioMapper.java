@@ -2,15 +2,16 @@ package br.com.murilocb123.portflow.mapper;
 
 import br.com.murilocb123.portflow.domain.entities.PortfolioEntity;
 import br.com.murilocb123.portflow.dto.PortfolioDTO;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class PortfolioMapper {
     public static PortfolioDTO toDTO(PortfolioEntity entity) {
         if (entity == null) return null;
         return new PortfolioDTO(
             entity.getId(),
             entity.getName(),
-            entity.getDefaultPortfolio(),
-            null // tenantId pode ser setado se necessário
+            entity.getDefaultPortfolio()
         );
     }
 

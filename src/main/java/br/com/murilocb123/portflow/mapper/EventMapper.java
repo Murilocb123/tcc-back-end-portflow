@@ -1,20 +1,24 @@
 package br.com.murilocb123.portflow.mapper;
 
 import br.com.murilocb123.portflow.domain.entities.EventEntity;
-import br.com.murilocb123.portflow.domain.enums.EventType;
 import br.com.murilocb123.portflow.dto.EventDTO;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class EventMapper {
     public static EventDTO toDTO(EventEntity entity) {
         if (entity == null) return null;
         return new EventDTO(
-            entity.getId(),
-            entity.getBroker() != null ? entity.getBroker().getId() : null,
-            entity.getAsset() != null ? entity.getAsset().getId() : null,
-            entity.getEventType() != null ? entity.getEventType().name() : null,
-            entity.getValue(),
-            entity.getEventDate(),
-            entity.getDescription()
+                entity.getId(),
+                BrokerMapper.toDTO(entity.getBroker()),
+                AssetMapper.toDTO(entity.getAsset()),
+                entity.getType(),
+                entity.getExDate(),
+                entity.getPayDate(),
+                entity.getValuePerShare(),
+                entity.getTotalValue(),
+                entity.getCurrency(),
+                entity.getNotes()
         );
     }
 
@@ -22,12 +26,15 @@ public class EventMapper {
         if (dto == null) return null;
         EventEntity entity = new EventEntity();
         entity.setId(dto.id());
-        entity.setValue(dto.value());
-        entity.setEventDate(dto.eventDate());
-        entity.setDescription(dto.description());
-        entity.setEventType(dto.eventType() != null ? EventType.valueOf(dto.eventType()) : null);
-        // Broker e Asset devem ser setados via service/repository se necessário
+        entity.setBroker(BrokerMapper.toEntity(dto.broker()));
+        entity.setAsset(AssetMapper.toEntity(dto.asset()));
+        entity.setType(dto.type());
+        entity.setExDate(dto.exDate());
+        entity.setPayDate(dto.payDate());
+        entity.setValuePerShare(dto.valuePerShare());
+        entity.setTotalValue(dto.totalValue());
+        entity.setCurrency(dto.currency());
+        entity.setNotes(dto.notes());
         return entity;
     }
 }
-
