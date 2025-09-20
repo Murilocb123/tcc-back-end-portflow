@@ -1,7 +1,9 @@
 package br.com.murilocb123.portflow.controller;
 
 import br.com.murilocb123.portflow.domain.entities.PortfolioEntity;
+import br.com.murilocb123.portflow.dto.BrokerDTO;
 import br.com.murilocb123.portflow.dto.PortfolioDTO;
+import br.com.murilocb123.portflow.mapper.BrokerMapper;
 import br.com.murilocb123.portflow.mapper.PortfolioMapper;
 import br.com.murilocb123.portflow.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/portfolios")
+@RequestMapping("/api/portfolio")
 @RequiredArgsConstructor
 public class PortfolioController {
     private final PortfolioService portfolioService;
@@ -49,5 +51,10 @@ public class PortfolioController {
         Page<PortfolioEntity> page = portfolioService.list(pageable);
         List<PortfolioDTO> dtos = page.getContent().stream().map(PortfolioMapper::toDTO).toList();
         return new PageImpl<>(dtos, pageable, page.getTotalElements());
+    }
+
+    @GetMapping("/all")
+    public List<PortfolioDTO> listAll() {
+        return portfolioService.listAll().stream().map(PortfolioMapper::toDTO).toList();
     }
 }

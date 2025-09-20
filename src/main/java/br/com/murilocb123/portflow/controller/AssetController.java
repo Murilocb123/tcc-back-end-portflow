@@ -2,17 +2,19 @@ package br.com.murilocb123.portflow.controller;
 
 import br.com.murilocb123.portflow.domain.entities.AssetEntity;
 import br.com.murilocb123.portflow.dto.AssetDTO;
-import br.com.murilocb123.portflow.service.AssetService;
+import br.com.murilocb123.portflow.dto.AssetFilterDTO;
+import br.com.murilocb123.portflow.dto.BrokerDTO;
 import br.com.murilocb123.portflow.mapper.AssetMapper;
+import br.com.murilocb123.portflow.mapper.BrokerMapper;
+import br.com.murilocb123.portflow.service.AssetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/assets")
@@ -45,9 +47,14 @@ public class AssetController {
     }
 
     @GetMapping
-    public Page<AssetDTO> list(Pageable pageable) {
-        Page<AssetEntity> page = assetService.list(pageable);
-        List<AssetDTO> dtos = page.getContent().stream().map(AssetMapper::toDTO).collect(Collectors.toList());
+    public Page<AssetDTO> list(Pageable pageable, AssetFilterDTO filter) {
+        Page<AssetEntity> page = assetService.list(pageable, filter);
+        List<AssetDTO> dtos = page.getContent().stream().map(AssetMapper::toDTO).toList();
         return new PageImpl<>(dtos, pageable, page.getTotalElements());
+    }
+
+    @GetMapping("/all")
+    public List<AssetDTO> listAll() {
+        return assetService.listAll().stream().map(AssetMapper::toDTO).toList();
     }
 }

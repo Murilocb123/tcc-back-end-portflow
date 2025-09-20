@@ -1,6 +1,7 @@
 package br.com.murilocb123.portflow.service.impl;
 
 import br.com.murilocb123.portflow.domain.entities.AssetEntity;
+import br.com.murilocb123.portflow.dto.AssetFilterDTO;
 import br.com.murilocb123.portflow.repositories.AssetRepository;
 import br.com.murilocb123.portflow.service.AssetService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -39,8 +41,16 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public Page<AssetEntity> list(Pageable pageable) {
+    public Page<AssetEntity> list(Pageable pageable, AssetFilterDTO filter) {
+        if (filter != null && filter.name() != null) {
+            return assetRepository.findAllByNameContainsIgnoreCase(filter.name(), pageable);
+        }
         return assetRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<AssetEntity> listAll() {
+        return assetRepository.findAll();
     }
 }
 

@@ -12,6 +12,7 @@ import br.com.murilocb123.portflow.infra.security.AppContextHolder;
 import br.com.murilocb123.portflow.infra.security.TokenService;
 import br.com.murilocb123.portflow.repositories.TenantRepository;
 import br.com.murilocb123.portflow.repositories.UserRepository;
+import br.com.murilocb123.portflow.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
     PasswordEncoder passwordEncoder;
     TokenService tokenService;
     DatabaseSessionManager databaseSessionManager;
+    PortfolioService portfolioService;
 
     @Override
     public void requestCreateUser(RegisterRequest registerRequest) {
@@ -49,6 +51,7 @@ public class AuthServiceImpl implements AuthService {
         databaseSessionManager.bindSession();
         newUser.setTenantId(tenantId);
         repository.save(newUser);
+        portfolioService.createDefaultPortfolioIfNotExists();
     }
 
 

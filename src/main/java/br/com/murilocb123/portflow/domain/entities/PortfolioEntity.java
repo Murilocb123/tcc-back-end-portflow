@@ -1,25 +1,21 @@
 package br.com.murilocb123.portflow.domain.entities;
 
-import br.com.murilocb123.portflow.domain.AbstractEntity;
+import br.com.murilocb123.portflow.domain.AbstractTenantEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "portfolio",
-        uniqueConstraints =
-        @UniqueConstraint(name = "uk_portfolio_name_tenant", columnNames = {"name", "tenant_id"})
-)
+@Table(name = "portfolio")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PortfolioEntity extends AbstractEntity {
+public class PortfolioEntity extends AbstractTenantEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
