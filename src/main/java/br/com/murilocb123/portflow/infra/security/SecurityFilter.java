@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -36,12 +37,19 @@ public class SecurityFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             AppContextHolder.setUserId(user.getId());
             AppContextHolder.setTenant(user.getTenantId());
+            AppContextHolder.setCurrentPortfolio(recoverPortfolioId(request));
         }
         try {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             AppContextHolder.clear();
         }
+    }
+
+    private UUID recoverPortfolioId(HttpServletRequest request) {
+        var portfolioIdHeader = request.getHeader("selectedPortfolio");
+        if (portfolioIdHeader == null) return null;
+        return UUID.fromString(portfolioIdHeader);
     }
 
     private String recoverToken(HttpServletRequest request) {

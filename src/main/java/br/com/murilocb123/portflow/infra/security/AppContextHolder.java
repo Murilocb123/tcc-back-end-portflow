@@ -11,6 +11,8 @@ public class AppContextHolder {
 
     private static final ThreadLocal<UUID> nCurrentTenant = new ThreadLocal<>();
 
+    private static final ThreadLocal<UUID> nCurrentPortfolio = new ThreadLocal<>();
+
     public static void setUserId(UUID nUserId) {
         nCurrentUserId.set(nUserId);
     }
@@ -25,6 +27,13 @@ public class AppContextHolder {
 
     public static UUID getTenant() {
         return nCurrentTenant.get();
+    }
+
+    public static void setCurrentPortfolio(UUID nPortfolio) {
+        nCurrentPortfolio.set(nPortfolio);
+    }
+    public static UUID getCurrentPortfolio() {
+        return nCurrentPortfolio.get();
     }
 
     public static void clear() {

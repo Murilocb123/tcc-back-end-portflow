@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "portfolio")
+@Table(name = "portfolio")  
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class PortfolioEntity extends AbstractTenantEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "default_porfolio", nullable = false)
+    @Column(name = "default_portfolio", nullable = false)
     private Boolean defaultPortfolio = false;
 
 }

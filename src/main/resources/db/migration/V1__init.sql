@@ -1,6 +1,5 @@
-CREATE
-EXTENSION IF NOT EXISTS "uuid-ossp";
-
+DROP EXTENSION IF EXISTS "uuid-ossp";
+CREATE EXTENSION "uuid-ossp";
 
 CREATE TABLE app_user
 (
@@ -97,26 +96,28 @@ CREATE TABLE event
 
 CREATE TABLE portfolio
 (
-    id               UUID         NOT NULL,
-    name             VARCHAR(255) NOT NULL,
-    default_porfolio BOOLEAN      NOT NULL,
-    created_at       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at       TIMESTAMP WITHOUT TIME ZONE,
-    created_by       UUID,
-    updated_by       UUID,
+    id                UUID         NOT NULL,
+    name              VARCHAR(255) NOT NULL,
+    default_portfolio BOOLEAN      NOT NULL,
+    tenant            UUID         NOT NULL,
+    created_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at        TIMESTAMP WITHOUT TIME ZONE,
+    created_by        UUID,
+    updated_by        UUID,
     CONSTRAINT pk_portfolio PRIMARY KEY (id)
 );
 
 CREATE TABLE portfolio_asset
 (
-    id            UUID             NOT NULL,
-    portfolio     UUID             NOT NULL,
-    tenant        UUID             NOT NULL,
-    quantity      DOUBLE PRECISION NOT NULL,
-    average_price DOUBLE PRECISION NOT NULL,
-    total_value   DOUBLE PRECISION NOT NULL,
+    id            UUID            NOT NULL,
+    portfolio     UUID            NOT NULL,
+    tenant        UUID            NOT NULL,
+    quantity      DECIMAL(28, 10) NOT NULL,
+    average_price DECIMAL(18, 2)  NOT NULL,
+    total_fee     DECIMAL(18, 2)  NOT NULL DEFAULT 0,
+    total_tax     DECIMAL(18, 2)  NOT NULL DEFAULT 0,
     broker        UUID,
-    asset         UUID             NOT NULL,
+    asset         UUID            NOT NULL,
     created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated_at    TIMESTAMP WITHOUT TIME ZONE,
     created_by    UUID,
@@ -168,7 +169,7 @@ ALTER TABLE asset
     ADD CONSTRAINT uk_asset_ticker_exchange UNIQUE (ticker, exchange);
 
 ALTER TABLE portfolio_asset
-    ADD CONSTRAINT uk_portfolio_asset_asset_portfolio_broker UNIQUE (asset, broker);
+    ADD CONSTRAINT uk_portfolio_asset_asset_portfolio_broker UNIQUE (asset, portfolio, broker);
 
 ALTER TABLE portfolio
     ADD CONSTRAINT uk_portfolio_name_tenant UNIQUE (name, tenant);
@@ -206,34 +207,34 @@ ALTER TABLE transaction
 
 -- Indexes
 -- app_user
-CREATE INDEX ix_app_user_tenant           ON app_user(tenant);
-CREATE INDEX ix_app_user_active           ON app_user(active);
+CREATE INDEX ix_app_user_tenant ON app_user (tenant);
+CREATE INDEX ix_app_user_active ON app_user (active);
 
 -- asset_history (muito acessada)
-CREATE INDEX ix_asset_history_price_date  ON asset_history(price_date);
-CREATE INDEX ix_asset_history_date_asset  ON asset_history(price_date, asset);
+CREATE INDEX ix_asset_history_price_date ON asset_history (price_date);
+CREATE INDEX ix_asset_history_date_asset ON asset_history (price_date, asset);
 
 -- event
-CREATE INDEX ix_event_portfolio           ON event(portfolio);
-CREATE INDEX ix_event_asset               ON event(asset);
-CREATE INDEX ix_event_broker              ON event(broker);
-CREATE INDEX ix_event_tenant              ON event(tenant);
-CREATE INDEX ix_event_ex_date             ON event(ex_date);
+CREATE INDEX ix_event_portfolio ON event (portfolio);
+CREATE INDEX ix_event_asset ON event (asset);
+CREATE INDEX ix_event_broker ON event (broker);
+CREATE INDEX ix_event_tenant ON event (tenant);
+CREATE INDEX ix_event_ex_date ON event (ex_date);
 -- (Opcional) buscas por pay_date:
-CREATE INDEX ix_event_pay_date            ON event(pay_date);
+CREATE INDEX ix_event_pay_date ON event (pay_date);
 
 -- portfolio_asset
-CREATE INDEX ix_portfolio_asset_portfolio ON portfolio_asset(portfolio);
-CREATE INDEX ix_portfolio_asset_asset     ON portfolio_asset(asset);
-CREATE INDEX ix_portfolio_asset_broker    ON portfolio_asset(broker);
-CREATE INDEX ix_portfolio_asset_tenant    ON portfolio_asset(tenant);
-CREATE INDEX ix_portfolio_asset_portfolio_asset ON portfolio_asset(portfolio, asset);
+CREATE INDEX ix_portfolio_asset_portfolio ON portfolio_asset (portfolio);
+CREATE INDEX ix_portfolio_asset_asset ON portfolio_asset (asset);
+CREATE INDEX ix_portfolio_asset_broker ON portfolio_asset (broker);
+CREATE INDEX ix_portfolio_asset_tenant ON portfolio_asset (tenant);
+CREATE INDEX ix_portfolio_asset_portfolio_asset ON portfolio_asset (portfolio, asset);
 
 -- transaction
-CREATE INDEX ix_transaction_portfolio     ON transaction(portfolio);
-CREATE INDEX ix_transaction_asset         ON transaction(asset);
-CREATE INDEX ix_transaction_broker        ON transaction(broker);
-CREATE INDEX ix_transaction_tenant        ON transaction(tenant);
-CREATE INDEX ix_transaction_trade_date    ON transaction(trade_date);
-CREATE INDEX ix_transaction_portfolio_date ON transaction(portfolio, trade_date);
-CREATE INDEX ix_transaction_asset_date     ON transaction(asset, trade_date);
+CREATE INDEX ix_transaction_portfolio ON transaction (portfolio);
+CREATE INDEX ix_transaction_asset ON transaction (asset);
+CREATE INDEX ix_transaction_broker ON transaction (broker);
+CREATE INDEX ix_transaction_tenant ON transaction (tenant);
+CREATE INDEX ix_transaction_trade_date ON transaction (trade_date);
+CREATE INDEX ix_transaction_portfolio_date ON transaction (portfolio, trade_date);
+CREATE INDEX ix_transaction_asset_date ON transaction (asset, trade_date);

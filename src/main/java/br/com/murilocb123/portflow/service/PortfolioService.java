@@ -15,5 +15,7 @@ public interface PortfolioService {
     void delete(UUID id);
     Page<PortfolioEntity> list(Pageable pageable);
     List<PortfolioEntity> listAll();
+
+
 }
 

@@ -12,7 +12,8 @@ public class PortfolioAssetMapper {
             entity.getId(),
             entity.getQuantity(),
             entity.getAveragePrice(),
-            entity.getTotalValue(),
+            entity.getTotalFee(),
+            entity.getTotalTax(),
             BrokerMapper.toDTO(entity.getBroker()),
             AssetMapper.toDTO(entity.getAsset())
         );
@@ -24,7 +25,8 @@ public class PortfolioAssetMapper {
         entity.setId(dto.id());
         entity.setQuantity(dto.quantity());
         entity.setAveragePrice(dto.averagePrice());
-        entity.setTotalValue(dto.totalValue());
+        entity.setTotalFee(dto.totalFee());
+        entity.setTotalTax(dto.totalTax());
         entity.setBroker(BrokerMapper.toEntity(dto.broker()));
         entity.setAsset(AssetMapper.toEntity(dto.asset()));
         return entity;

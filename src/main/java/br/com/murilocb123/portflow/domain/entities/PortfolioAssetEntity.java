@@ -7,12 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 
 @Entity
-@Table(name = "portfolio_asset",
-        uniqueConstraints =
-        @UniqueConstraint(name = "uk_portfolio_asset_asset_portfolio_broker", columnNames = {"asset", "portfolio_id", "broker"})
-)
+@Table(name = "portfolio_asset")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,13 +21,16 @@ public class PortfolioAssetEntity extends AbstractPortfolioEntity {
     // colunas de preço medio, quantidade, broker, etc
 
     @Column(name = "quantity", nullable = false)
-    private Double quantity;
+    private BigDecimal quantity = BigDecimal.ZERO;
 
     @Column(name = "average_price", nullable = false)
-    private Double averagePrice;
+    private BigDecimal averagePrice = BigDecimal.ZERO;
 
-    @Column(name = "total_value", nullable = false)
-    private Double totalValue;
+    @Column(name = "total_fee", nullable = false)
+    private BigDecimal totalFee = BigDecimal.ZERO;
+
+    @Column(name = "total_tax", nullable = false)
+    private BigDecimal totalTax = BigDecimal.ZERO;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "broker")

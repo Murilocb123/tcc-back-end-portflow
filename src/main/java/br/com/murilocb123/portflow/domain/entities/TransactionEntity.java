@@ -1,7 +1,6 @@
 package br.com.murilocb123.portflow.domain.entities;
 
 import br.com.murilocb123.portflow.domain.AbstractPortfolioEntity;
-import br.com.murilocb123.portflow.domain.AbstractTenantEntity;
 import br.com.murilocb123.portflow.domain.enums.TxnType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,10 +42,10 @@ public class TransactionEntity extends AbstractPortfolioEntity {
     private BigDecimal price;
 
     @Column(name = "gross_value", precision = 18, scale = 2)
-    private BigDecimal grossValue;
+    private BigDecimal grossValue = BigDecimal.ZERO;
 
     @Column(name = "net_value", precision = 18, scale = 2)
-    private BigDecimal netValue;
+    private BigDecimal netValue = BigDecimal.ZERO;
 
     @Column(name = "fee_value", precision = 18, scale = 2)
     private BigDecimal feeValue = BigDecimal.ZERO;
