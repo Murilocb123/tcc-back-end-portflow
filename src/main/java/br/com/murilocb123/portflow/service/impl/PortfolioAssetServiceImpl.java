@@ -5,6 +5,7 @@ import br.com.murilocb123.portflow.domain.entities.PortfolioEntity;
 import br.com.murilocb123.portflow.domain.entities.TransactionEntity;
 import br.com.murilocb123.portflow.domain.enums.TxnType;
 import br.com.murilocb123.portflow.infra.exceptions.custom.BusinessException;
+import br.com.murilocb123.portflow.infra.security.AppContextHolder;
 import br.com.murilocb123.portflow.repositories.PortfolioAssetRepository;
 import br.com.murilocb123.portflow.repositories.TransactionRepository;
 import br.com.murilocb123.portflow.service.PortfolioAssetService;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
@@ -48,11 +50,12 @@ public class PortfolioAssetServiceImpl implements PortfolioAssetService {
 
     @Override
     public Page<PortfolioAssetEntity> list(Pageable pageable) {
-        return portfolioAssetRepository.findAll(pageable);
+        return portfolioAssetRepository.findAllByPortfolioId(AppContextHolder.getCurrentPortfolio(), pageable);
     }
 
 
     @Override
+    @Transactional
     public void updateOrDeleteByTransactionDelete(TransactionEntity transactionEntity) {
         var existing = portfolioAssetRepository.findByPortfolioIdAndAssetIdAndBrokerId(transactionEntity.getPortfolio().getId(),
                 transactionEntity.getAsset().getId(),
@@ -75,6 +78,7 @@ public class PortfolioAssetServiceImpl implements PortfolioAssetService {
     }
 
     @Override
+    @Transactional
     public void createOrUpdateByTransactionCreate(TransactionEntity transactionEntity, Boolean isUpdate) {
         var existing = portfolioAssetRepository.findByPortfolioIdAndAssetIdAndBrokerId(transactionEntity.getPortfolio().getId(),
                 transactionEntity.getAsset().getId(),

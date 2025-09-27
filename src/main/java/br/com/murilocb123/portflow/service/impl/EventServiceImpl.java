@@ -1,8 +1,10 @@
 package br.com.murilocb123.portflow.service.impl;
 
 import br.com.murilocb123.portflow.domain.entities.EventEntity;
+import br.com.murilocb123.portflow.infra.security.AppContextHolder;
 import br.com.murilocb123.portflow.repositories.EventRepository;
 import br.com.murilocb123.portflow.service.EventService;
+import br.com.murilocb123.portflow.utils.PortfolioUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventEntity create(EventEntity entity) {
+        PortfolioUtils.addPortfolioToEntity(entity);
         return eventRepository.save(entity);
     }
 
@@ -30,6 +33,7 @@ public class EventServiceImpl implements EventService {
     public EventEntity update(UUID id, EventEntity entity) {
         EventEntity existing = getById(id);
         entity.setId(existing.getId());
+        PortfolioUtils.addPortfolioToEntity(entity);
         return eventRepository.save(entity);
     }
 
@@ -40,7 +44,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Page<EventEntity> list(Pageable pageable) {
-        return eventRepository.findAll(pageable);
+        return eventRepository.findAllByPortfolioId(AppContextHolder.getCurrentPortfolio(), pageable);
     }
 }
 

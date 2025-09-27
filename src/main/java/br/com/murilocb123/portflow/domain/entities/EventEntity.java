@@ -32,20 +32,11 @@ public class EventEntity extends AbstractPortfolioEntity {
     @Column(name = "type", nullable = false)
     private EventType type;
 
-    @Column(name = "ex_date", nullable = false)
-    private LocalDate exDate;
-
-    @Column(name = "pay_date")
-    private LocalDate payDate;
-
-    @Column(name = "value_per_share", precision = 18, scale = 6)
-    private BigDecimal valuePerShare;
+    @Column(name = "event_date")
+    private LocalDate eventDate;
 
     @Column(name = "total_value", precision = 18, scale = 2)
     private BigDecimal totalValue;
-
-    @Column(name = "currency", nullable = false, length = 3)
-    private String currency = "BRL";
 
     @Column(name = "notes")
     private String notes;

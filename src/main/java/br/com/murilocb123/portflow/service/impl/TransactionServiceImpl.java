@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
@@ -27,6 +28,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
+    @Transactional
     public TransactionEntity create(TransactionEntity entity) {
         calculateGrossAndNetValue(entity);
         PortfolioUtils.addPortfolioToEntity(entity);
@@ -41,6 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional
     public TransactionEntity update(UUID id, TransactionEntity entity) {
         TransactionEntity existing = getById(id);
         entity.setId(existing.getId());

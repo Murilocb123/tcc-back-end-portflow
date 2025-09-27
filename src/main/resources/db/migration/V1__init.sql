@@ -81,11 +81,8 @@ CREATE TABLE event
     broker          UUID,
     asset           UUID         NOT NULL,
     type            VARCHAR(255) NOT NULL,
-    ex_date         date         NOT NULL,
-    pay_date        date,
-    value_per_share DECIMAL(18, 6),
+    event_date        date,
     total_value     DECIMAL(18, 2),
-    currency        VARCHAR(3)   NOT NULL,
     notes           VARCHAR(255),
     created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated_at      TIMESTAMP WITHOUT TIME ZONE,
@@ -219,9 +216,7 @@ CREATE INDEX ix_event_portfolio ON event (portfolio);
 CREATE INDEX ix_event_asset ON event (asset);
 CREATE INDEX ix_event_broker ON event (broker);
 CREATE INDEX ix_event_tenant ON event (tenant);
-CREATE INDEX ix_event_ex_date ON event (ex_date);
--- (Opcional) buscas por pay_date:
-CREATE INDEX ix_event_pay_date ON event (pay_date);
+CREATE INDEX ix_event_date ON event (event_date);
 
 -- portfolio_asset
 CREATE INDEX ix_portfolio_asset_portfolio ON portfolio_asset (portfolio);

@@ -11,11 +11,8 @@ public record EventDTO(
         BrokerDTO broker,
         AssetDTO asset,
         EventType type,
-        LocalDate exDate,
-        LocalDate payDate,
-        BigDecimal valuePerShare,
+        LocalDate eventDate,
         BigDecimal totalValue,
-        String currency,
         String notes
 ) {
 }

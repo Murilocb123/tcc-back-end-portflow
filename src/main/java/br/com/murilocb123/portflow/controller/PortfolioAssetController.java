@@ -2,8 +2,8 @@ package br.com.murilocb123.portflow.controller;
 
 import br.com.murilocb123.portflow.domain.entities.PortfolioAssetEntity;
 import br.com.murilocb123.portflow.dto.PortfolioAssetDTO;
-import br.com.murilocb123.portflow.service.PortfolioAssetService;
 import br.com.murilocb123.portflow.mapper.PortfolioAssetMapper;
+import br.com.murilocb123.portflow.service.PortfolioAssetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/portfolio-assets")

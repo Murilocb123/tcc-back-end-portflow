@@ -13,11 +13,8 @@ public class EventMapper {
                 BrokerMapper.toDTO(entity.getBroker()),
                 AssetMapper.toDTO(entity.getAsset()),
                 entity.getType(),
-                entity.getExDate(),
-                entity.getPayDate(),
-                entity.getValuePerShare(),
+                entity.getEventDate(),
                 entity.getTotalValue(),
-                entity.getCurrency(),
                 entity.getNotes()
         );
     }
@@ -29,11 +26,8 @@ public class EventMapper {
         entity.setBroker(BrokerMapper.toEntity(dto.broker()));
         entity.setAsset(AssetMapper.toEntity(dto.asset()));
         entity.setType(dto.type());
-        entity.setExDate(dto.exDate());
-        entity.setPayDate(dto.payDate());
-        entity.setValuePerShare(dto.valuePerShare());
+        entity.setEventDate(dto.eventDate());
         entity.setTotalValue(dto.totalValue());
-        entity.setCurrency(dto.currency());
         entity.setNotes(dto.notes());
         return entity;
     }
