@@ -1,7 +1,9 @@
 package br.com.murilocb123.portflow.service;
 
+import br.com.murilocb123.portflow.domain.entities.EventEntity;
 import br.com.murilocb123.portflow.domain.entities.PortfolioAssetEntity;
 import br.com.murilocb123.portflow.domain.entities.TransactionEntity;
+import br.com.murilocb123.portflow.dto.StrategyDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,6 +16,9 @@ public interface PortfolioAssetService {
     void delete(UUID id);
     Page<PortfolioAssetEntity> list(Pageable pageable);
     void updateOrDeleteByTransactionDelete(TransactionEntity transactionEntity);
-    void createOrUpdateByTransactionCreate(TransactionEntity transactionEntity, Boolean isUpdate);
+    void createOrUpdateByTransactionCreate(TransactionEntity transactionEntity);
+    void updateOrDeleteByEventDelete(EventEntity eventEntity);
+    void createOrUpdateByEventCreate(EventEntity eventEntity);
+    Page<StrategyDTO> listWithCurrentPrice(Pageable pageable);
 }
 

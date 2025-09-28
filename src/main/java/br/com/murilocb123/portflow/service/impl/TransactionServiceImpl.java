@@ -33,7 +33,7 @@ public class TransactionServiceImpl implements TransactionService {
         calculateGrossAndNetValue(entity);
         PortfolioUtils.addPortfolioToEntity(entity);
         var entitySaved = transactionRepository.save(entity);
-        portfolioAssetService.createOrUpdateByTransactionCreate(entitySaved, false);
+        portfolioAssetService.createOrUpdateByTransactionCreate(entitySaved);
         return entitySaved;
     }
 
@@ -49,8 +49,12 @@ public class TransactionServiceImpl implements TransactionService {
         entity.setId(existing.getId());
         calculateGrossAndNetValue(entity);
         PortfolioUtils.addPortfolioToEntity(entity);
+        if (!Objects.equals(existing.getBroker().getId(), entity.getBroker().getId()) ||
+                !Objects.equals(existing.getAsset().getId(), entity.getAsset().getId())) {
+            portfolioAssetService.updateOrDeleteByTransactionDelete(existing);
+        }
         var entitySaved = transactionRepository.save(entity);
-        portfolioAssetService.createOrUpdateByTransactionCreate(entitySaved, true);
+        portfolioAssetService.createOrUpdateByTransactionCreate(entitySaved);
         return entitySaved;
     }
 

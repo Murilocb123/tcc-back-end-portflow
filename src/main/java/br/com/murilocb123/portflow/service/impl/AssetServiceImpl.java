@@ -2,6 +2,7 @@ package br.com.murilocb123.portflow.service.impl;
 
 import br.com.murilocb123.portflow.domain.entities.AssetEntity;
 import br.com.murilocb123.portflow.dto.AssetFilterDTO;
+import br.com.murilocb123.portflow.infra.security.AppContextHolder;
 import br.com.murilocb123.portflow.repositories.AssetRepository;
 import br.com.murilocb123.portflow.service.AssetService;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,11 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public List<AssetEntity> listAll() {
         return assetRepository.findAll();
+    }
+
+    @Override
+    public List<AssetEntity> listAllByAssetsAvailable(UUID assetId) {
+        return assetRepository.findAllByAssetsIdAvailable(assetId, AppContextHolder.getCurrentPortfolio());
     }
 }
 

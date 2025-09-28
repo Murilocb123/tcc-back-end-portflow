@@ -2,6 +2,7 @@ package br.com.murilocb123.portflow.controller;
 
 import br.com.murilocb123.portflow.domain.entities.PortfolioAssetEntity;
 import br.com.murilocb123.portflow.dto.PortfolioAssetDTO;
+import br.com.murilocb123.portflow.dto.StrategyDTO;
 import br.com.murilocb123.portflow.mapper.PortfolioAssetMapper;
 import br.com.murilocb123.portflow.service.PortfolioAssetService;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +49,10 @@ public class PortfolioAssetController {
         Page<PortfolioAssetEntity> page = portfolioAssetService.list(pageable);
         List<PortfolioAssetDTO> dtos = page.getContent().stream().map(PortfolioAssetMapper::toDTO).toList();
         return new PageImpl<>(dtos, pageable, page.getTotalElements());
+    }
+
+    @GetMapping("/strategies")
+    public Page<StrategyDTO> listStrategies(Pageable pageable) {
+        return portfolioAssetService.listWithCurrentPrice(pageable);
     }
 }

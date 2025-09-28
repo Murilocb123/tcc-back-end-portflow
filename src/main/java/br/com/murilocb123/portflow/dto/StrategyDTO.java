@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record PortfolioAssetDTO(
+public record StrategyDTO(
         UUID id,
         BigDecimal quantity,
         BigDecimal averagePrice,
@@ -14,6 +14,7 @@ public record PortfolioAssetDTO(
         BigDecimal totalReceivable,
         BrokerDTO broker,
         AssetDTO asset,
-        LocalDate startDate
+        LocalDate startDate,
+        BigDecimal targetPrice
 ) {
 }

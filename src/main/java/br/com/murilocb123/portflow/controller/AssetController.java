@@ -57,4 +57,9 @@ public class AssetController {
     public List<AssetDTO> listAll() {
         return assetService.listAll().stream().map(AssetMapper::toDTO).toList();
     }
+
+    @GetMapping("/available/{assetId}")
+    public List<AssetDTO> listAllByAssetsAvailable(@PathVariable UUID assetId) {
+        return assetService.listAllByAssetsAvailable(assetId).stream().map(AssetMapper::toDTO).toList();
+    }
 }

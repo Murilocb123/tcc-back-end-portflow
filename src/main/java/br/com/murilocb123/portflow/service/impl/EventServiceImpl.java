@@ -3,7 +3,10 @@ package br.com.murilocb123.portflow.service.impl;
 import br.com.murilocb123.portflow.domain.entities.EventEntity;
 import br.com.murilocb123.portflow.infra.security.AppContextHolder;
 import br.com.murilocb123.portflow.repositories.EventRepository;
+import br.com.murilocb123.portflow.repositories.PortfolioRepository;
 import br.com.murilocb123.portflow.service.EventService;
+import br.com.murilocb123.portflow.service.PortfolioAssetService;
+import br.com.murilocb123.portflow.service.PortfolioService;
 import br.com.murilocb123.portflow.utils.PortfolioUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,10 +20,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
+    private final PortfolioAssetService portfolioAssetService;
 
     @Override
     public EventEntity create(EventEntity entity) {
         PortfolioUtils.addPortfolioToEntity(entity);
+        portfolioAssetService.createOrUpdateByEventCreate(entity);
         return eventRepository.save(entity);
     }
 
@@ -32,8 +37,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventEntity update(UUID id, EventEntity entity) {
         EventEntity existing = getById(id);
+        portfolioAssetService.updateOrDeleteByEventDelete(existing);
         entity.setId(existing.getId());
         PortfolioUtils.addPortfolioToEntity(entity);
+        portfolioAssetService.createOrUpdateByEventCreate(entity);
         return eventRepository.save(entity);
     }
 

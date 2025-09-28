@@ -15,5 +15,6 @@ public interface BrokerService {
     void delete(UUID id);
     Page<BrokerEntity> list(Pageable pageable, BrokerFilterDTO filter);
     List<BrokerEntity> listAll();
+    List<BrokerEntity> listAllByBrokersAvailable(UUID assetId);
 }
 

@@ -15,5 +15,6 @@ public interface AssetService {
     void delete(UUID id);
     Page<AssetEntity> list(Pageable pageable, AssetFilterDTO filter);
     List<AssetEntity> listAll();
+    List<AssetEntity> listAllByAssetsAvailable(UUID assetId);
 }
 

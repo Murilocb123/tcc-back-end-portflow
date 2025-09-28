@@ -55,4 +55,9 @@ public class BrokerController {
     public List<BrokerDTO> listAll() {
         return brokerService.listAll().stream().map(BrokerMapper::toDTO).toList();
     }
+
+    @GetMapping("/available/asset/{assetId}")
+    public List<BrokerDTO> listAllByBrokersAvailable(@PathVariable UUID assetId) {
+        return brokerService.listAllByBrokersAvailable(assetId).stream().map(BrokerMapper::toDTO).toList();
+    }
 }

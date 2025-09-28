@@ -12,10 +12,13 @@ public class PortfolioAssetMapper {
             entity.getId(),
             entity.getQuantity(),
             entity.getAveragePrice(),
+            entity.getTotalInvested(),
             entity.getTotalFee(),
             entity.getTotalTax(),
+            entity.getTotalReceivable(),
             BrokerMapper.toDTO(entity.getBroker()),
-            AssetMapper.toDTO(entity.getAsset())
+            AssetMapper.toDTO(entity.getAsset()),
+            entity.getStartDate()
         );
     }
 
@@ -25,10 +28,13 @@ public class PortfolioAssetMapper {
         entity.setId(dto.id());
         entity.setQuantity(dto.quantity());
         entity.setAveragePrice(dto.averagePrice());
+        entity.setTotalInvested(dto.totalInvested());
         entity.setTotalFee(dto.totalFee());
         entity.setTotalTax(dto.totalTax());
+        entity.setTotalReceivable(dto.totalReceivable());
         entity.setBroker(BrokerMapper.toEntity(dto.broker()));
         entity.setAsset(AssetMapper.toEntity(dto.asset()));
+        entity.setStartDate(dto.startDate());
         return entity;
     }
 }

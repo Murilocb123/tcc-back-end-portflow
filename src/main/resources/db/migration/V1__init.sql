@@ -104,6 +104,7 @@ CREATE TABLE portfolio
     CONSTRAINT pk_portfolio PRIMARY KEY (id)
 );
 
+
 CREATE TABLE portfolio_asset
 (
     id            UUID            NOT NULL,
@@ -115,6 +116,8 @@ CREATE TABLE portfolio_asset
     total_tax     DECIMAL(18, 2)  NOT NULL DEFAULT 0,
     broker        UUID,
     asset         UUID            NOT NULL,
+    total_receivable DECIMAL(18, 2)  NOT NULL DEFAULT 0,
+    start_date    date            NOT NULL,
     created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated_at    TIMESTAMP WITHOUT TIME ZONE,
     created_by    UUID,

@@ -2,6 +2,7 @@ package br.com.murilocb123.portflow.service.impl;
 
 import br.com.murilocb123.portflow.domain.entities.BrokerEntity;
 import br.com.murilocb123.portflow.dto.BrokerFilterDTO;
+import br.com.murilocb123.portflow.infra.security.AppContextHolder;
 import br.com.murilocb123.portflow.repositories.BrokerRepository;
 import br.com.murilocb123.portflow.service.BrokerService;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,11 @@ public class BrokerServiceImpl implements BrokerService {
     @Override
     public List<BrokerEntity> listAll() {
         return brokerRepository.findAll();
+    }
+
+    @Override
+    public List<BrokerEntity> listAllByBrokersAvailable(UUID assetId) {
+        return brokerRepository.findAllByAssetsIdAvailable(assetId, AppContextHolder.getCurrentPortfolio());
     }
 }
 
