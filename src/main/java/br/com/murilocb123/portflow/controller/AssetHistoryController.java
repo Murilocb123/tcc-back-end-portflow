@@ -1,14 +1,13 @@
 package br.com.murilocb123.portflow.controller;
 
 import br.com.murilocb123.portflow.domain.entities.AssetHistoryEntity;
-import br.com.murilocb123.portflow.domain.identifier.AssetPriceId;
 import br.com.murilocb123.portflow.dto.AssetHistoryDTO;
 import br.com.murilocb123.portflow.mapper.AssetHistoryMapper;
 import br.com.murilocb123.portflow.service.AssetHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -2,8 +2,8 @@ package br.com.murilocb123.portflow.controller;
 
 import br.com.murilocb123.portflow.domain.entities.TransactionEntity;
 import br.com.murilocb123.portflow.dto.TransactionDTO;
-import br.com.murilocb123.portflow.service.TransactionService;
 import br.com.murilocb123.portflow.mapper.TransactionMapper;
+import br.com.murilocb123.portflow.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,6 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TransactionController {
     private final TransactionService transactionService;
+
 
     @PostMapping
     public TransactionDTO create(@RequestBody TransactionDTO dto) {
@@ -47,6 +48,7 @@ public class TransactionController {
     public Page<TransactionDTO> list(Pageable pageable) {
         Page<TransactionEntity> page = transactionService.list(pageable);
         List<TransactionDTO> dtos = page.getContent().stream().map(TransactionMapper::toDTO).toList();
+        // converte para json e printa no console
         return new PageImpl<>(dtos, pageable, page.getTotalElements());
     }
 }

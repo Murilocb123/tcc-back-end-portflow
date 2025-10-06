@@ -9,6 +9,5 @@ import java.util.UUID;
 
 public interface EventRepository extends JpaRepository<EventEntity, UUID> {
     Page<EventEntity> findAllByPortfolioId(UUID portfolioId, Pageable pageable);
-
 }
 
