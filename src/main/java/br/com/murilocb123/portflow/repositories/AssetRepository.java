@@ -18,10 +18,8 @@ public interface AssetRepository extends JpaRepository<AssetEntity, UUID> {
                   FROM AssetEntity a
             INNER JOIN PortfolioAssetEntity pa
                     ON pa.asset.id = a.id
-                 WHERE pa.asset.id = :assetId
-                   AND pa.quantity > 0
-                   AND pa.portfolio.id = :portfolioId
+                 WHERE pa.portfolio.id = :portfolioId
             """)
-    List<AssetEntity> findAllByAssetsIdAvailable(UUID assetId, UUID portfolioId);
+    List<AssetEntity> findAllByAssetsIdAvailable(UUID portfolioId);
 }
 

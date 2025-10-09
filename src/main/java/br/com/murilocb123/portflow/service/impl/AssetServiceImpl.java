@@ -55,8 +55,8 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public List<AssetEntity> listAllByAssetsAvailable(UUID assetId) {
-        return assetRepository.findAllByAssetsIdAvailable(assetId, AppContextHolder.getCurrentPortfolio());
+    public List<AssetEntity> listAllByAssetsAvailable() {
+        return assetRepository.findAllByAssetsIdAvailable(AppContextHolder.getCurrentPortfolio());
     }
 }
 

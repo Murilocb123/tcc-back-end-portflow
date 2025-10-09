@@ -3,9 +3,7 @@ package br.com.murilocb123.portflow.controller;
 import br.com.murilocb123.portflow.domain.entities.AssetEntity;
 import br.com.murilocb123.portflow.dto.AssetDTO;
 import br.com.murilocb123.portflow.dto.AssetFilterDTO;
-import br.com.murilocb123.portflow.dto.BrokerDTO;
 import br.com.murilocb123.portflow.mapper.AssetMapper;
-import br.com.murilocb123.portflow.mapper.BrokerMapper;
 import br.com.murilocb123.portflow.service.AssetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -58,8 +56,8 @@ public class AssetController {
         return assetService.listAll().stream().map(AssetMapper::toDTO).toList();
     }
 
-    @GetMapping("/available/{assetId}")
-    public List<AssetDTO> listAllByAssetsAvailable(@PathVariable UUID assetId) {
-        return assetService.listAllByAssetsAvailable(assetId).stream().map(AssetMapper::toDTO).toList();
+    @GetMapping("/available")
+    public List<AssetDTO> listAllByAssetsAvailable() {
+        return assetService.listAllByAssetsAvailable().stream().map(AssetMapper::toDTO).toList();
     }
 }

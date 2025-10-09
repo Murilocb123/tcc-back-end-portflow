@@ -19,7 +19,6 @@ public interface BrokerRepository extends JpaRepository<BrokerEntity, UUID> {
         INNER JOIN PortfolioAssetEntity pa
                 ON pa.broker.id = b.id
              WHERE pa.asset.id = :assetId
-              AND pa.quantity > 0
               AND pa.portfolio.id = :portfolioId
         """)
     List<BrokerEntity> findAllByAssetsIdAvailable(UUID assetId, UUID portfolioId);

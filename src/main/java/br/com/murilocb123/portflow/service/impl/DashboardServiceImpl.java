@@ -1,12 +1,13 @@
 package br.com.murilocb123.portflow.service.impl;
 
-import br.com.murilocb123.portflow.domain.entities.VwPortfolioDailyReturnEntity;
 import br.com.murilocb123.portflow.dto.OverviewDashboardDTO;
-import br.com.murilocb123.portflow.dto.PortfolioDailyReturnDTO;
+import br.com.murilocb123.portflow.dto.PortfolioAssetDailyReturnsDTO;
 import br.com.murilocb123.portflow.dto.PortfolioMonthlyIncomeDTO;
 import br.com.murilocb123.portflow.infra.security.AppContextHolder;
+import br.com.murilocb123.portflow.mapper.PortfolioAssetDailyReturnsMapper;
 import br.com.murilocb123.portflow.mapper.PortfolioDailyReturnMapper;
 import br.com.murilocb123.portflow.repositories.PortfolioAssetRepository;
+import br.com.murilocb123.portflow.repositories.VwPortfolioAssetDailyReturnsRepository;
 import br.com.murilocb123.portflow.repositories.VwPortfolioDailyReturnRepository;
 import br.com.murilocb123.portflow.repositories.VwPortfolioMonthlyIncomeRepository;
 import br.com.murilocb123.portflow.service.DashboardService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,15 +28,7 @@ public class DashboardServiceImpl implements DashboardService {
     VwPortfolioDailyReturnRepository portfolioDailyReturnRepository;
     PortfolioAssetRepository portfolioAssetRepository;
     VwPortfolioMonthlyIncomeRepository portfolioMonthlyIncomeRepository;
-
-
-    public List<PortfolioDailyReturnDTO> getPortfolioDailyReturns() {
-        var portfolioId = AppContextHolder.getCurrentPortfolio();
-        List<VwPortfolioDailyReturnEntity> entities = portfolioDailyReturnRepository.findAllByPortfolio(portfolioId);
-        return entities.stream()
-                .map(PortfolioDailyReturnMapper::toDTO)
-                .toList();
-    }
+    VwPortfolioAssetDailyReturnsRepository portfolioAssetDailyReturnsRepository;
 
     @Override
     public OverviewDashboardDTO getPortfolioOverview() {
@@ -69,5 +63,13 @@ public class DashboardServiceImpl implements DashboardService {
                 dailyReturns,
                 monthlyIncomeDto
         );
+    }
+
+    @Override
+    public List<PortfolioAssetDailyReturnsDTO> getDetailedDailyReturnsByAsset(UUID assetID) {
+        var portfolioId = AppContextHolder.getCurrentPortfolio();
+        return portfolioAssetDailyReturnsRepository.findAllByPortfolioAndAsset(portfolioId, assetID).stream()
+                .map(PortfolioAssetDailyReturnsMapper::toDTO)
+                .toList();
     }
 }

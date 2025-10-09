@@ -47,7 +47,7 @@ public class AssetHistoryController {
     @GetMapping
     public Page<AssetHistoryDTO> list(Pageable pageable) {
         Page<AssetHistoryEntity> page = assetHistoryService.list(pageable);
-        List<AssetHistoryDTO> dtos = page.getContent().stream().map(AssetHistoryMapper::toDTO).collect(Collectors.toList());
+        List<AssetHistoryDTO> dtos = page.getContent().stream().map(AssetHistoryMapper::toDTO).toList();
         return new PageImpl<>(dtos, pageable, page.getTotalElements());
     }
 }
