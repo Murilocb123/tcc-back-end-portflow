@@ -1,5 +1,7 @@
-DROP EXTENSION IF EXISTS "uuid-ossp";
-CREATE EXTENSION "uuid-ossp";
+DROP
+EXTENSION IF EXISTS "uuid-ossp";
+CREATE
+EXTENSION "uuid-ossp";
 
 CREATE TABLE app_user
 (
@@ -75,19 +77,19 @@ CREATE TABLE broker
 
 CREATE TABLE event
 (
-    id              UUID         NOT NULL,
-    portfolio       UUID         NOT NULL,
-    tenant          UUID         NOT NULL,
-    broker          UUID,
-    asset           UUID         NOT NULL,
-    type            VARCHAR(255) NOT NULL,
-    event_date        date,
-    total_value     DECIMAL(18, 2),
-    notes           VARCHAR(255),
-    created_at      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at      TIMESTAMP WITHOUT TIME ZONE,
-    created_by      UUID,
-    updated_by      UUID,
+    id          UUID         NOT NULL,
+    portfolio   UUID         NOT NULL,
+    tenant      UUID         NOT NULL,
+    broker      UUID,
+    asset       UUID         NOT NULL,
+    type        VARCHAR(255) NOT NULL,
+    event_date  date,
+    total_value DECIMAL(18, 2),
+    notes       VARCHAR(255),
+    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE,
+    created_by  UUID,
+    updated_by  UUID,
     CONSTRAINT pk_event PRIMARY KEY (id)
 );
 
@@ -107,21 +109,21 @@ CREATE TABLE portfolio
 
 CREATE TABLE portfolio_asset
 (
-    id            UUID            NOT NULL,
-    portfolio     UUID            NOT NULL,
-    tenant        UUID            NOT NULL,
-    quantity      DECIMAL(28, 10) NOT NULL,
-    average_price DECIMAL(18, 2)  NOT NULL,
-    total_fee     DECIMAL(18, 2)  NOT NULL DEFAULT 0,
-    total_tax     DECIMAL(18, 2)  NOT NULL DEFAULT 0,
-    broker        UUID,
-    asset         UUID            NOT NULL,
+    id               UUID            NOT NULL,
+    portfolio        UUID            NOT NULL,
+    tenant           UUID            NOT NULL,
+    quantity         DECIMAL(28, 10) NOT NULL,
+    average_price    DECIMAL(18, 2)  NOT NULL,
+    total_fee        DECIMAL(18, 2)  NOT NULL DEFAULT 0,
+    total_tax        DECIMAL(18, 2)  NOT NULL DEFAULT 0,
+    broker           UUID,
+    asset            UUID            NOT NULL,
     total_receivable DECIMAL(18, 2)  NOT NULL DEFAULT 0,
-    start_date    date            NOT NULL,
-    created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at    TIMESTAMP WITHOUT TIME ZONE,
-    created_by    UUID,
-    updated_by    UUID,
+    start_date       date            NOT NULL,
+    created_at       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at       TIMESTAMP WITHOUT TIME ZONE,
+    created_by       UUID,
+    updated_by       UUID,
     CONSTRAINT pk_portfolio_asset PRIMARY KEY (id)
 );
 
@@ -155,6 +157,19 @@ CREATE TABLE transaction
     created_by  UUID,
     updated_by  UUID,
     CONSTRAINT pk_transaction PRIMARY KEY (id)
+);
+
+CREATE TABLE asset_forecast
+(
+    id            UUID           NOT NULL PRIMARY KEY,
+    asset         UUID           NOT NULL,
+    forecast_date DATE           NOT NULL,
+    yhat          DECIMAL(18, 6) NOT NULL,
+    yhat_lower    DECIMAL(18, 6),
+    yhat_upper    DECIMAL(18, 6),
+    created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    created_by    UUID,
+    CONSTRAINT fk_asset_forecast_asset FOREIGN KEY (asset) REFERENCES asset (id)
 );
 
 

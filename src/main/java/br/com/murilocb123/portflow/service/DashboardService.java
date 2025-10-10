@@ -1,5 +1,6 @@
 package br.com.murilocb123.portflow.service;
 
+import br.com.murilocb123.portflow.dto.ForecastAssetDTO;
 import br.com.murilocb123.portflow.dto.OverviewDashboardDTO;
 import br.com.murilocb123.portflow.dto.PortfolioAssetDailyReturnsDTO;
 
@@ -10,4 +11,6 @@ public interface DashboardService {
     OverviewDashboardDTO getPortfolioOverview();
 
     List<PortfolioAssetDailyReturnsDTO> getDetailedDailyReturnsByAsset(UUID assetID);
+
+    ForecastAssetDTO getForecastedDailyReturnsByAsset(UUID assetID);
 }

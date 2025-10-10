@@ -1,15 +1,11 @@
 package br.com.murilocb123.portflow.service.impl;
 
-import br.com.murilocb123.portflow.dto.OverviewDashboardDTO;
-import br.com.murilocb123.portflow.dto.PortfolioAssetDailyReturnsDTO;
-import br.com.murilocb123.portflow.dto.PortfolioMonthlyIncomeDTO;
+import br.com.murilocb123.portflow.dto.*;
+import br.com.murilocb123.portflow.dto.enums.HistoryForecastType;
 import br.com.murilocb123.portflow.infra.security.AppContextHolder;
 import br.com.murilocb123.portflow.mapper.PortfolioAssetDailyReturnsMapper;
 import br.com.murilocb123.portflow.mapper.PortfolioDailyReturnMapper;
-import br.com.murilocb123.portflow.repositories.PortfolioAssetRepository;
-import br.com.murilocb123.portflow.repositories.VwPortfolioAssetDailyReturnsRepository;
-import br.com.murilocb123.portflow.repositories.VwPortfolioDailyReturnRepository;
-import br.com.murilocb123.portflow.repositories.VwPortfolioMonthlyIncomeRepository;
+import br.com.murilocb123.portflow.repositories.*;
 import br.com.murilocb123.portflow.service.DashboardService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,8 +22,9 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DashboardServiceImpl implements DashboardService {
 
-    VwPortfolioDailyReturnRepository portfolioDailyReturnRepository;
+    AssetForecastRepository assetForecastRepository;
     PortfolioAssetRepository portfolioAssetRepository;
+    VwPortfolioDailyReturnRepository portfolioDailyReturnRepository;
     VwPortfolioMonthlyIncomeRepository portfolioMonthlyIncomeRepository;
     VwPortfolioAssetDailyReturnsRepository portfolioAssetDailyReturnsRepository;
 
@@ -71,5 +69,31 @@ public class DashboardServiceImpl implements DashboardService {
         return portfolioAssetDailyReturnsRepository.findAllByPortfolioAndAsset(portfolioId, assetID).stream()
                 .map(PortfolioAssetDailyReturnsMapper::toDTO)
                 .toList();
+    }
+
+    @Override
+    public ForecastAssetDTO getForecastedDailyReturnsByAsset(UUID assetID) {
+        var portfolioId = AppContextHolder.getCurrentPortfolio();
+        var historyAndForecast = assetForecastRepository.findHistoryAndForecastUnion(assetID).stream()
+                .map(item -> new AssetHistoryForecastDTO(
+                        HistoryForecastType.valueOf((String) item[0]),
+                        ((Date) item[1]).toLocalDate(),
+                        (BigDecimal) item[2],
+                        (BigDecimal) item[3],
+                        (BigDecimal) item[4]
+                ))
+                .toList();
+        var totalQuantity = portfolioAssetRepository.totalQuantityByPortfolioAndAsset(portfolioId, assetID);
+        //pega a ultima data disponivel
+        var totalForecastValue = historyAndForecast.stream()
+                .reduce((first, second) -> second)
+                .map(AssetHistoryForecastDTO::value)
+                .orElse(BigDecimal.ZERO);
+        totalForecastValue = totalForecastValue.multiply(totalQuantity != null ? totalQuantity : BigDecimal.ZERO);
+        return new ForecastAssetDTO(
+                totalQuantity != null ? totalQuantity : BigDecimal.ZERO,
+                totalForecastValue,
+                historyAndForecast
+        );
     }
 }

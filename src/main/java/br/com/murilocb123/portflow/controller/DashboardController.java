@@ -1,5 +1,6 @@
 package br.com.murilocb123.portflow.controller;
 
+import br.com.murilocb123.portflow.dto.ForecastAssetDTO;
 import br.com.murilocb123.portflow.dto.OverviewDashboardDTO;
 import br.com.murilocb123.portflow.dto.PortfolioAssetDailyReturnsDTO;
 import br.com.murilocb123.portflow.service.DashboardService;
@@ -28,5 +29,10 @@ public class DashboardController {
     @GetMapping("/portfolio-asset-daily-returns/{assetId}")
     public List<PortfolioAssetDailyReturnsDTO> getDetailedDailyReturnsByAsset(@PathVariable UUID assetId) {
         return dashboardService.getDetailedDailyReturnsByAsset(assetId);
+    }
+
+    @GetMapping("/portfolio-asset-forecast/{assetId}")
+    public ForecastAssetDTO getForecastedDailyReturnsByAsset(@PathVariable UUID assetId) {
+        return dashboardService.getForecastedDailyReturnsByAsset(assetId);
     }
 }
