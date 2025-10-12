@@ -15,10 +15,11 @@ public interface PortfolioAssetService {
     PortfolioAssetEntity update(UUID id, PortfolioAssetEntity entity);
     void delete(UUID id);
     Page<PortfolioAssetEntity> list(Pageable pageable);
-    void updateOrDeleteByTransactionDelete(TransactionEntity transactionEntity);
+    void updateOrDeleteByTransactionDelete(TransactionEntity transactionEntity, boolean isDelete);
     void createOrUpdateByTransactionCreate(TransactionEntity transactionEntity);
     void updateOrDeleteByEventDelete(EventEntity eventEntity);
     void createOrUpdateByEventCreate(EventEntity eventEntity);
     Page<StrategyDTO> listWithCurrentPrice(Pageable pageable);
+    void persistPortfolio(PortfolioAssetEntity portfolioAssetEntity);
 }
 

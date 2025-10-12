@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,5 +50,12 @@ public class AssetHistoryController {
         Page<AssetHistoryEntity> page = assetHistoryService.list(pageable);
         List<AssetHistoryDTO> dtos = page.getContent().stream().map(AssetHistoryMapper::toDTO).toList();
         return new PageImpl<>(dtos, pageable, page.getTotalElements());
+    }
+
+    @GetMapping("/quote/{assetId}")
+    public AssetHistoryDTO listByAssetIdAndDate(@PathVariable UUID assetId, @Param(value = "date") String date) {
+        AssetHistoryEntity entity = assetHistoryService.listByAssetIdAndDate(assetId, date);
+        var dto = AssetHistoryMapper.toDTO(entity);
+        return dto != null ? dto : new AssetHistoryDTO(null, null, null, null, null, null, null);
     }
 }

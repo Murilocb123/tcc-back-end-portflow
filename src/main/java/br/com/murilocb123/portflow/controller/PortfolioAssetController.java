@@ -21,10 +21,9 @@ public class PortfolioAssetController {
     private final PortfolioAssetService portfolioAssetService;
 
     @PostMapping
-    public PortfolioAssetDTO create(@RequestBody PortfolioAssetDTO dto) {
+    public void create(@RequestBody PortfolioAssetDTO dto) {
         PortfolioAssetEntity entity = PortfolioAssetMapper.toEntity(dto);
-        PortfolioAssetEntity saved = portfolioAssetService.create(entity);
-        return PortfolioAssetMapper.toDTO(saved);
+        portfolioAssetService.persistPortfolio(entity);
     }
 
     @GetMapping("/{id}")

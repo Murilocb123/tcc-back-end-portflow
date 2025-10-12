@@ -8,6 +8,7 @@ import br.com.murilocb123.portflow.infra.security.AppContextHolder;
 import br.com.murilocb123.portflow.mapper.AssetMapper;
 import br.com.murilocb123.portflow.mapper.BrokerMapper;
 import br.com.murilocb123.portflow.repositories.AssetHistoryRepository;
+import br.com.murilocb123.portflow.repositories.EventRepository;
 import br.com.murilocb123.portflow.repositories.PortfolioAssetRepository;
 import br.com.murilocb123.portflow.repositories.TransactionRepository;
 import br.com.murilocb123.portflow.service.PortfolioAssetService;
@@ -29,6 +30,7 @@ import java.util.UUID;
 public class PortfolioAssetServiceImpl implements PortfolioAssetService {
     private final PortfolioAssetRepository portfolioAssetRepository;
     private final TransactionRepository transactionRepository;
+    private final EventRepository eventRepository;
     private final AssetHistoryRepository assetHistoryRepository;
 
     @Override
@@ -89,10 +91,43 @@ public class PortfolioAssetServiceImpl implements PortfolioAssetService {
         return new PageImpl<>(strategyList, pageable, page.getTotalElements());
     }
 
+    @Override
+    @Transactional
+    public void persistPortfolio(PortfolioAssetEntity portfolioAssetEntity) {
+        var portfolio = new PortfolioEntity();
+        portfolio.setId(AppContextHolder.getCurrentPortfolio());
+        portfolioAssetEntity.setPortfolio(portfolio);
+        portfolioAssetEntity.setTotalReceivable(BigDecimal.ZERO);
+        portfolioAssetEntity.setTotalInvested(portfolioAssetEntity.getAveragePrice().multiply(portfolioAssetEntity.getQuantity()));
+        portfolioAssetEntity.setTotalFee(BigDecimal.ZERO);
+        portfolioAssetEntity.setTotalTax(BigDecimal.ZERO);
+        var opt = portfolioAssetRepository.findByPortfolioIdAndAssetIdAndBrokerId(
+                portfolioAssetEntity.getPortfolio().getId(),
+                portfolioAssetEntity.getAsset().getId(),
+                portfolioAssetEntity.getBroker().getId());
+        if (opt.isPresent()) {
+            throw new BusinessException("Ativo ja existe na carteira", "O ativo informado ja existe na carteira para a corretora selecionada.");
+        }
+        var transactionEntity = new TransactionEntity();
+        transactionEntity.setTradeDate(portfolioAssetEntity.getStartDate());
+        transactionEntity.setType(TxnType.BUY);
+        transactionEntity.setBroker(portfolioAssetEntity.getBroker());
+        transactionEntity.setAsset(portfolioAssetEntity.getAsset());
+        transactionEntity.setQuantity(portfolioAssetEntity.getQuantity());
+        transactionEntity.setPrice(portfolioAssetEntity.getAveragePrice());
+        transactionEntity.setGrossValue(portfolioAssetEntity.getAveragePrice().multiply(portfolioAssetEntity.getQuantity()));
+        transactionEntity.setNetValue(portfolioAssetEntity.getAveragePrice().multiply(portfolioAssetEntity.getQuantity()));
+        transactionEntity.setFeeValue(BigDecimal.ZERO);
+        transactionEntity.setTaxValue(BigDecimal.ZERO);
+        transactionEntity.setPortfolio(portfolioAssetEntity.getPortfolio());
+        transactionRepository.save(transactionEntity);
+        portfolioAssetRepository.save(portfolioAssetEntity);
+    }
+
 
     @Override
     @Transactional
-    public void updateOrDeleteByTransactionDelete(TransactionEntity transactionEntity) {
+    public void updateOrDeleteByTransactionDelete(TransactionEntity transactionEntity, boolean isDelete) {
         var opt = portfolioAssetRepository.findByPortfolioIdAndAssetIdAndBrokerId(
                 transactionEntity.getPortfolio().getId(),
                 transactionEntity.getAsset().getId(),
@@ -100,11 +135,12 @@ public class PortfolioAssetServiceImpl implements PortfolioAssetService {
 
         opt.ifPresent(portfolioAssetEntity -> {
             revertTransaction(portfolioAssetEntity, transactionEntity);
-            if (portfolioAssetEntity.getQuantity().compareTo(BigDecimal.ZERO) == 0) {
-                portfolioAssetRepository.delete(portfolioAssetEntity);
-            } else {
-                portfolioAssetRepository.save(portfolioAssetEntity);
+            if (portfolioAssetEntity.getQuantity().compareTo(BigDecimal.ZERO) == 0 && isDelete) {
+                portfolioAssetRepository.deleteById(portfolioAssetEntity.getId());
+                deleteAllEventsAndTransactions(transactionEntity.getPortfolio().getId(), transactionEntity.getAsset().getId(), transactionEntity.getBroker().getId());
+                return;
             }
+            portfolioAssetRepository.save(portfolioAssetEntity);
         });
     }
 
@@ -208,6 +244,11 @@ public class PortfolioAssetServiceImpl implements PortfolioAssetService {
         if (portfolioAssetEntity.getQuantity().compareTo(BigDecimal.ZERO) < 0) {
             throw new BusinessException("Quantidade invalida", "A quantidade do ativo na carteira para a corretora selecionada não pode ser negativa");
         }
+    }
+
+    private void deleteAllEventsAndTransactions(UUID portfolioId, UUID assetId, UUID brokerId) {
+        eventRepository.deleteAllByPortfolioIdAndAssetIdAndBrokerId(portfolioId, assetId, brokerId);
+        transactionRepository.deleteAllByPortfolioIdAndAssetIdAndBrokerId(portfolioId, assetId, brokerId);
     }
 
 }

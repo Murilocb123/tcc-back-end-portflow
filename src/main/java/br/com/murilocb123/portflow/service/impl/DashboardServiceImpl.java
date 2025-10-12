@@ -89,10 +89,22 @@ public class DashboardServiceImpl implements DashboardService {
                 .reduce((first, second) -> second)
                 .map(AssetHistoryForecastDTO::value)
                 .orElse(BigDecimal.ZERO);
+        var lastPriceDate = historyAndForecast.stream()
+                .reduce((first, second) -> second)
+                .map(AssetHistoryForecastDTO::date)
+                .orElse(null);
+        var lastPrice = historyAndForecast.stream()
+                .filter(history -> history.type() == HistoryForecastType.HISTORY)
+                .reduce((first, second) -> second)
+                .map(AssetHistoryForecastDTO::value)
+                .orElse(BigDecimal.ZERO);
         totalForecastValue = totalForecastValue.multiply(totalQuantity != null ? totalQuantity : BigDecimal.ZERO);
+        var totalNowValue = lastPrice.multiply(totalQuantity != null ? totalQuantity : BigDecimal.ZERO);
         return new ForecastAssetDTO(
                 totalQuantity != null ? totalQuantity : BigDecimal.ZERO,
                 totalForecastValue,
+                totalNowValue,
+                lastPriceDate,
                 historyAndForecast
         );
     }

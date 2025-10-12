@@ -48,7 +48,6 @@ public class TransactionController {
     public Page<TransactionDTO> list(Pageable pageable) {
         Page<TransactionEntity> page = transactionService.list(pageable);
         List<TransactionDTO> dtos = page.getContent().stream().map(TransactionMapper::toDTO).toList();
-        // converte para json e printa no console
         return new PageImpl<>(dtos, pageable, page.getTotalElements());
     }
 }

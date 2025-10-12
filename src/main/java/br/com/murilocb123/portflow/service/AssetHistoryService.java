@@ -12,5 +12,6 @@ public interface AssetHistoryService {
     AssetHistoryEntity update(UUID assetId, String date, AssetHistoryEntity entity);
     void delete(UUID assetId, String date);
     Page<AssetHistoryEntity> list(Pageable pageable);
+    AssetHistoryEntity listByAssetIdAndDate(UUID assetId, String date);
 }
 

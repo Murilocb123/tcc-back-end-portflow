@@ -5,6 +5,7 @@ import br.com.murilocb123.portflow.domain.identifier.AssetPriceId;
 import br.com.murilocb123.portflow.repositories.AssetHistoryRepository;
 import br.com.murilocb123.portflow.service.AssetHistoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AssetHistoryServiceImpl implements AssetHistoryService {
     private final AssetHistoryRepository assetHistoryRepository;
+    private final ResourcePatternResolver resourcePatternResolver;
 
     @Override
     public AssetHistoryEntity create(AssetHistoryEntity entity) {
@@ -46,6 +48,11 @@ public class AssetHistoryServiceImpl implements AssetHistoryService {
     @Override
     public Page<AssetHistoryEntity> list(Pageable pageable) {
         return assetHistoryRepository.findAll(pageable);
+    }
+
+    @Override
+    public AssetHistoryEntity listByAssetIdAndDate(UUID assetId, String date) {
+        return assetHistoryRepository.findByAssetIdAndIdPriceDate(assetId, LocalDate.parse(date));
     }
 }
 

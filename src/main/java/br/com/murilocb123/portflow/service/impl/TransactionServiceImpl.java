@@ -51,7 +51,9 @@ public class TransactionServiceImpl implements TransactionService {
         PortfolioUtils.addPortfolioToEntity(entity);
         if (!Objects.equals(existing.getBroker().getId(), entity.getBroker().getId()) ||
                 !Objects.equals(existing.getAsset().getId(), entity.getAsset().getId())) {
-            portfolioAssetService.updateOrDeleteByTransactionDelete(existing);
+            portfolioAssetService.updateOrDeleteByTransactionDelete(existing, true);
+        } else {
+            portfolioAssetService.updateOrDeleteByTransactionDelete(existing, false);
         }
         var entitySaved = transactionRepository.save(entity);
         portfolioAssetService.createOrUpdateByTransactionCreate(entitySaved);
@@ -59,10 +61,11 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
         var entity = getById(id);
+        portfolioAssetService.updateOrDeleteByTransactionDelete(entity, true);
         transactionRepository.deleteById(id);
-        portfolioAssetService.updateOrDeleteByTransactionDelete(entity);
     }
 
     @Override
